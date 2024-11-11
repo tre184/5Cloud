@@ -40,7 +40,7 @@ df = df.rename(columns={'arc_adresse': 'adresse'})
 # Change the data types of the columns
 df = df.astype({
     'nom_site': 'string',
-    'arc_adresse': 'string',
+    'adresse': 'string',
     'cp': 'string',
     'idpw': 'string',
     'nombre_de_borne_wifi': 'int',
