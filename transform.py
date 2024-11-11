@@ -57,4 +57,4 @@ print(df.columns)
 print(df)
 
 # Save the transformed data
-df.to_csv('data_transform.csv', index=False)
+df.to_csv('./data/paris_wifi_data.csv', index=False)
