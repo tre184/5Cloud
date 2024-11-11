@@ -1,0 +1,9 @@
+apache-airflow
+pandas
+jupyter
+matplotlib
+requests
+ipython
+plotly
+panel
+kaleido
