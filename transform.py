@@ -1,5 +1,5 @@
 import pandas as pd
-import json
+
 
 # Load data from local CSV
 df = pd.read_csv('./dags/files/paris_wifi.csv', delimiter=';')
