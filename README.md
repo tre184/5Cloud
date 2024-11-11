@@ -13,6 +13,9 @@ pip freeze
 ## Télécharger le fichier docker-compose.yaml
 Invoke-WebRequest -Uri 'https://airflow.apache.org/docs/apache-airflow/2.5.1/docker-compose.yaml' -OutFile 'docker-compose.yaml'
 
+## Créer les répertoires 
+mkdir -p dags logs plugins
+
 ## Initialiser la base de données Airflow
 docker compose up airflow-init
 
