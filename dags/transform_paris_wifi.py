@@ -28,7 +28,7 @@ def change_column_types():
     # Change the data types of the columns
     df = df.astype({
         'nom_site': 'string',
-        'arc_adresse': 'string',
+        'adresse': 'string',
         'cp': 'string',
         'idpw': 'string',
         'nombre_de_borne_wifi': 'int',
@@ -40,8 +40,8 @@ default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
     'start_date': datetime(2024, 11, 11),
-    'retries': 1,
-    'retry_delay': timedelta(minutes=5),
+    'retries': 2,
+    'retry_delay': timedelta(minutes=10),
 }
 
 dag = DAG('data_transform', default_args=default_args, schedule_interval='@hourly')
