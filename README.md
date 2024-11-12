@@ -37,7 +37,7 @@ Airflow exécute cette tâche toutes les heures pour télécharger les données 
 
 ## Transformation des Données avec Pandas
 
-**Fichier** : `transform_paris_wifi.py`
+**Fichier** : `dags/transform_paris_wifi.py`
 
 **Description** : Ce script, utilisé dans un DAG Airflow, nettoie et transforme les données pour les préparer à l'analyse. Il dépend d'un autre DAG, `data_ingestion`, qui ingère les données depuis l'API Open Data de Paris. Une fois que `data_ingestion` a terminé, ce DAG exécute les étapes suivantes :
 
