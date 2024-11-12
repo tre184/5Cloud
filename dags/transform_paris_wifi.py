@@ -1,5 +1,6 @@
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
+from airflow.sensors.external_task import ExternalTaskSensor
 from datetime import datetime, timedelta
 import pandas as pd
 
@@ -45,8 +46,22 @@ default_args = {
 
 dag = DAG('data_transform', default_args=default_args, schedule_interval='@hourly')
 
+# Sensor to wait for the task to complete fetch_data in the DAG data_ingestion
+wait_for_data_ingestion = ExternalTaskSensor(
+    task_id='wait_for_data_ingestion',
+    external_dag_id='data_ingestion',
+    external_task_id='fetch_data',
+    allowed_states=['success'],
+    execution_delta=timedelta(hours=1),
+    dag=dag,
+)
+
+# Data Transformation Task
 change_column_types_task = PythonOperator(
     task_id='change_column_types',
     python_callable=change_column_types,
     dag=dag,
 )
+
+# Defining dependency
+wait_for_data_ingestion >> change_column_types_task
