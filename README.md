@@ -37,18 +37,23 @@ Airflow exécute cette tâche toutes les heures pour télécharger les données 
 
 ## Transformation des Données avec Pandas
 
-**Fichier** : `transform_data.py`
+**Fichier** : `transform_paris_wifi.py`
 
-**Description** : Ce script nettoie et transforme les données pour les préparer à l'analyse. Les étapes de transformation incluent :
+**Description** : Ce script, utilisé dans un DAG Airflow, nettoie et transforme les données pour les préparer à l'analyse. Il dépend d'un autre DAG, `data_ingestion`, qui ingère les données depuis l'API Open Data de Paris. Une fois que `data_ingestion` a terminé, ce DAG exécute les étapes suivantes :
 
-- **Suppression de colonnes** : Suppression de la colonne `geo_shape`.
-- **Séparation des Coordonnées** : La colonne `geo_point_2d` est séparée en `latitude` et `longitude`.
-- **Changement des Types de Données** : Changement des types de certaines colonnes pour garantir la cohérence (ex : `cp` en `string`).
-- **Renommage des Colonnes** : Renommage de certaines colonnes pour simplifier leur utilisation dans les visualisations et sauvegarder le fichier CSV localement dans le dossier `data`.
+- **Suppression de colonnes** : Supprime la colonne `geo_shape` pour alléger les données.
+- **Séparation des Coordonnées** : La colonne `geo_point_2d`, qui contient des coordonnées sous forme de chaîne de caractères, est séparée en deux colonnes distinctes, `latitude` et `longitude`.
+- **Changement des Types de Données** : Convertit les types de certaines colonnes pour assurer la cohérence des données, notamment en changeant `cp` en `string`.
+- **Renommage des Colonnes** : Renomme certaines colonnes pour simplifier leur utilisation dans les visualisations, par exemple `arc_adresse` devient `adresse`.
+- **Sauvegarde des Données** : Le fichier transformé est enregistré localement sous forme de CSV dans le répertoire `dags/data`.
+
+### Configuration dans Airflow
+
+Ce DAG utilise un capteur (`ExternalTaskSensor`) pour attendre que la tâche `fetch_data` du DAG `data_ingestion` soit terminée avant d'exécuter la transformation des données. Si `fetch_data` réussit, la tâche `change_column_types` s'exécute pour transformer et sauvegarder les données.
 
 ## Visualisation des Données avec Jupyter Notebook et Plotly
 
-**Fichier** : `notebooks/dashboard.ipynb`
+**Fichier** : `notebooks/dashboard_airflow.ipynb`
 
 **Description** : Ce notebook utilise `Plotly` et `Panel` pour créer des visualisations interactives. Les visualisations incluent :
 
@@ -59,6 +64,6 @@ Airflow exécute cette tâche toutes les heures pour télécharger les données 
 
 **Mise à jour et sauvegarde des tableaux de bord** :
 - Les tableaux de bord sont mis à jour toutes les cinq minutes.
-- Chaque visualisation est sauvegardée dans le répertoire `plots`, avec un horodatage dans le nom de fichier pour les différencier.
+- Chaque visualisation est sauvegardée dans le répertoire `dags/plots`, avec un horodatage dans le nom de fichier pour les différencier.
 - Pour maintenir les mises à jour, il est nécessaire de laisser le terminal où Jupyter est lancé en marche.
 
